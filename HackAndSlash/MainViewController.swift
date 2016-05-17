@@ -13,7 +13,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var tableView: UITableView!
     
     var heroToPass: NSDictionary?
-    
     var heroes: Array<NSDictionary> = []
     
     var rand2: Int = 0
@@ -26,7 +25,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     @IBAction func GeneratePersonButtonPressed(sender: UIButton) {
-        let random = arc4random_uniform(43)
+        let random = arc4random_uniform(42)
         print(random)
         // Do any additional setup after loading the view, typically from a nib.
         let url = NSURL(string: "http://www.anapioficeandfire.com/api/characters?page=\(random)&pageSize=50")
@@ -43,15 +42,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 if let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSArray {
                     
                     for i in 0..<jsonResult.count {
-                        if let culture: String = String(jsonResult[i]["culture"]!!) {
+                                                if let culture: String = String(jsonResult[i]["culture"]!!) {
                             if culture != Optional("") {
-                                if culture == "Northmen" || culture == "Ironborn" || culture == "Free Folk" || culture == "Dothraki" || culture == "Tyroshi" {
-                                    
-                                    self.personByName.append(jsonResult[i] as! NSDictionary)
+                                if culture == "Northmen" || culture == "Ironborn" || culture == "Free Folk" || culture == "Valyrian" || culture == "Dothraki" || culture == "Tyroshi" || culture == "Dornish" || culture == "Asshai" || culture == "Qohori" {
                                     self.rand2 = Int(arc4random_uniform(UInt32(self.personByName.count/2)))
-                                    
+                                    self.personByName.append(jsonResult[i] as! NSDictionary)
                                 }
-                                
                             }
                         }
                     }
@@ -92,6 +88,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             cell!.textLabel?.textColor = UIColor.whiteColor()
         case "Dothraki":
             cell!.backgroundColor = UIColor.redColor()
+        case "Qohori":
+            cell!.backgroundColor = UIColor.purpleColor()
+            cell!.textLabel?.textColor = UIColor.greenColor()
         case "Ironborn":
             cell!.backgroundColor = UIColor.blackColor()
             cell!.textLabel?.textColor = UIColor.yellowColor()
@@ -101,6 +100,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         case "Tyroshi":
             cell!.backgroundColor = UIColor.yellowColor()
             cell!.textLabel?.textColor = UIColor.purpleColor()
+        case "Dornish":
+            cell!.backgroundColor = UIColor.orangeColor()
+            cell!.textLabel?.textColor = UIColor.redColor()
+        case "Asshai":
+            cell!.backgroundColor = UIColor.grayColor()
+            cell!.textLabel?.textColor = UIColor.purpleColor()
+        case "Valyrian":
+            cell!.backgroundColor = UIColor.blackColor()
+            cell!.textLabel?.textColor = UIColor.redColor()
         default:
             break
         }
