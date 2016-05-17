@@ -12,6 +12,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     @IBOutlet weak var tableView: UITableView!
     
+    var heroToPass: NSDictionary?
+    
     var heroes: Array<NSDictionary> = []
     
     var rand2: Int = 0
@@ -54,7 +56,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         }
                     }
                     print("rand", self.personByName[self.rand2])
-                    if self.heroes.count <= 6 {
+                    if self.heroes.count < 6 {
                         self.heroes.append(self.personByName[self.rand2] )
                         
                     }
@@ -109,16 +111,38 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
     }
 // delete
+    
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        heroes.removeAtIndex(indexPath.row)
+        print("here attempting deletion")
+        if editingStyle == .Delete {
+            heroes.removeAtIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        }
         tableView.reloadData()
     }
+    
 // selected one hero, perform segue
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        print(indexPath.row)
-        performSegueWithIdentifier("DetailSegue", sender: nil)
+        print(indexPath.row, "woo")
+        performSegueWithIdentifier("DetailSegue", sender: tableView.cellForRowAtIndexPath(indexPath))
+        tableView.reloadData()
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        print("made it here")
+        let controller = segue.destinationViewController as! CharacterDetailController
+        print(sender)
+        
+        if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
+            print(indexPath.row)
+            print(heroes[indexPath.row])
+            controller.heroToPass = heroes[indexPath.row]
+        }
+
+//        controller.delegate = self
+        
+        
+    }
     
 }
 
